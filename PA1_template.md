@@ -1,15 +1,31 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 The data is loaded using `read.csv` and stored in a variable `activity`
-```{r, echo = TRUE}
+
+```r
 library(dplyr)
+```
+
+```
+## 
+## Attaching package: 'dplyr'
+```
+
+```
+## The following objects are masked from 'package:stats':
+## 
+##     filter, lag
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+```
+
+```r
 activity <- read.csv("activity.csv")
 #format column "date" as date
 #format column "interval" into minutes from midnight
@@ -21,7 +37,8 @@ activity <- activity %>%
 
 ## What is mean total number of steps taken per day?
 Total number of steps per day is calculated and stored in `daily_stats`
-```{r, echo = TRUE, results="hide", message=FALSE, warning=FALSE}
+
+```r
 daily_stats <- activity %>%
                 group_by(date) %>%
                 summarise(total = sum(steps, na.rm=TRUE))
@@ -30,7 +47,8 @@ daily_stats <- activity %>%
 
 Calculate the mean and plot a histogram
 
-```{r, echo=TRUE}
+
+```r
 mean_daily <- mean(daily_stats$total, na.rm=T)
 median_daily <- median(daily_stats$total, na.rm=T)
 
@@ -53,32 +71,41 @@ g1 <- ggplot(data=daily_stats, aes(daily_stats$total)) +
 g1
 ```
 
-Total daily steps has a **Mean of `r round(mean_daily,0)`** and a **Median of `r median_daily`**     
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+Total daily steps has a **Mean of 9354** and a **Median of 10395**     
 
 
 ## What is the average daily activity pattern?
-```{r, echo=TRUE}
+
+```r
 stats_5min <- activity %>%
   group_by(interval) %>%
   summarise(average = mean(steps, na.rm=TRUE))
 
 plot(stats_5min$interval, stats_5min$average, type="l", xlab="Minutes since midnight", ylab="Average Steps in 5 min interval", main="Average Daily Activity Pattern")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+```r
 max_steps_interval <-  with(stats_5min, 
                             interval[which(average == max(average))])
 ```
 
 The 5 minute interval with **maximum average steps** across all days occurs at 
-**`r max_steps_interval %/%60` hrs and `r max_steps_interval %%60` minutes.** 
+**8 hrs and 35 minutes.** 
 
 
 ## Imputing missing values
-```{r, echo=TRUE}
+
+```r
 na_count <- sum(!complete.cases(activity))
 ```
-The date set has **`r na_count` rows** with missing data.
+The date set has **2304 rows** with missing data.
 
-```{r, echo=TRUE}
+
+```r
 # imputing value as average of the 5-minute interval
 activity_imp <- activity
 for (i in 1:nrow(activity_imp)) {
@@ -100,7 +127,11 @@ median_daily_imp <- median(daily_stats_imputed$total)
 
 # plot original histogram
 g1
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+
+```r
 # plot histogram on imputed data
 ggplot(data=daily_stats_imputed, aes(daily_stats_imputed$total)) +
   labs(x="Steps", y="Frequency") +
@@ -116,17 +147,19 @@ ggplot(data=daily_stats_imputed, aes(daily_stats_imputed$total)) +
   annotate("text", label = paste("mean =",round(mean_daily_imp,0)), 
            x = mean_daily_imp, y = 5, vjust=+1.0, size = 4, angle=90, 
            colour = "white")
-
 ```
 
-Total daily steps on original data has a **Mean of `r as.integer(mean_daily)`** and a **Median of `r as.integer(median_daily)`**     
+![](PA1_template_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
 
-Total daily steps on imputed data has a **Mean of `r as.integer(mean_daily_imp)`** and a **Median of `r as.integer(median_daily_imp)`**     
+Total daily steps on original data has a **Mean of 9354** and a **Median of 10395**     
+
+Total daily steps on imputed data has a **Mean of 10766** and a **Median of 10766**     
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r, echo=TRUE}
+
+```r
 activity_imp$day <- as.factor(ifelse(weekdays(activity_imp$date) 
                                   %in% c("Saturday", "Sunday"), 
                                   "weekend", "weekday"))
@@ -137,3 +170,5 @@ stats_5min_imp <- activity_imp %>%
 
 ggplot(data=stats_5min_imp, aes(x=interval, y=average))+ ylab("No. of steps") + geom_line()+facet_wrap(~day, ncol=1)
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
