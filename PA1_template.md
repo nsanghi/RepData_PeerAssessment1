@@ -73,7 +73,7 @@ g1
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-Total daily steps has a **Mean of 9354** and a **Median of 10395**     
+Total daily steps has a **Mean of 9354 **and a **Median of 10395**     
 
 
 ## What is the average daily activity pattern?
@@ -83,7 +83,9 @@ stats_5min <- activity %>%
   group_by(interval) %>%
   summarise(average = mean(steps, na.rm=TRUE))
 
-plot(stats_5min$interval, stats_5min$average, type="l", xlab="Minutes since midnight", ylab="Average Steps in 5 min interval", main="Average Daily Activity Pattern")
+plot(stats_5min$interval, stats_5min$average, type="l", 
+     xlab="Minutes since midnight", ylab="Average Steps in 5 min interval",
+     main="Average Daily Activity Pattern")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
@@ -168,7 +170,8 @@ stats_5min_imp <- activity_imp %>%
   group_by(day, interval) %>%
   summarise(average = mean(steps, na.rm=TRUE))
 
-ggplot(data=stats_5min_imp, aes(x=interval, y=average))+ ylab("No. of steps") + geom_line()+facet_wrap(~day, ncol=1)
+ggplot(data=stats_5min_imp, aes(x=interval, y=average))+ ylab("No. of steps") +
+  geom_line()+facet_wrap(~day, ncol=1)
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-7-1.png)<!-- -->

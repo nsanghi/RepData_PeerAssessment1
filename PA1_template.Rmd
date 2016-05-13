@@ -53,7 +53,7 @@ g1 <- ggplot(data=daily_stats, aes(daily_stats$total)) +
 g1
 ```
 
-Total daily steps has a **Mean of `r round(mean_daily,0)`** and a **Median of `r median_daily`**     
+Total daily steps has a **Mean of `r round(mean_daily,0)` **and a **Median of `r median_daily`**     
 
 
 ## What is the average daily activity pattern?
@@ -62,7 +62,9 @@ stats_5min <- activity %>%
   group_by(interval) %>%
   summarise(average = mean(steps, na.rm=TRUE))
 
-plot(stats_5min$interval, stats_5min$average, type="l", xlab="Minutes since midnight", ylab="Average Steps in 5 min interval", main="Average Daily Activity Pattern")
+plot(stats_5min$interval, stats_5min$average, type="l", 
+     xlab="Minutes since midnight", ylab="Average Steps in 5 min interval",
+     main="Average Daily Activity Pattern")
 
 max_steps_interval <-  with(stats_5min, 
                             interval[which(average == max(average))])
@@ -135,5 +137,6 @@ stats_5min_imp <- activity_imp %>%
   group_by(day, interval) %>%
   summarise(average = mean(steps, na.rm=TRUE))
 
-ggplot(data=stats_5min_imp, aes(x=interval, y=average))+ ylab("No. of steps") + geom_line()+facet_wrap(~day, ncol=1)
+ggplot(data=stats_5min_imp, aes(x=interval, y=average))+ ylab("No. of steps") +
+  geom_line()+facet_wrap(~day, ncol=1)
 ```
