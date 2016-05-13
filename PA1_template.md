@@ -73,7 +73,7 @@ g1
 
 ![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
-Total daily steps has a **Mean of 9354 **and a **Median of 10395**     
+Total daily steps has a **Mean of 9354** and a **Median of 10395**     
 
 
 ## What is the average daily activity pattern?
